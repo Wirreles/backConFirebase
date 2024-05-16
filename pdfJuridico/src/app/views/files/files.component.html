@@ -1,0 +1,20 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Agregar Archivo
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-item>
+    <ion-label>Seleccionar Archivo</ion-label>
+    <input type="file" (change)="onFileSelected($event)">
+  </ion-item>
+
+  <ion-item *ngIf="selectedFile">
+    <ion-label>Archivo Seleccionado:</ion-label>
+    <ion-text>{{ selectedFile.name }}</ion-text>
+  </ion-item>
+</ion-content>
+

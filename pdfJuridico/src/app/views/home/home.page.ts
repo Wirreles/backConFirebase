@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { IonHeader, IonToolbar, IonTitle, IonContent, IonLabel, IonList, IonItem, IonCard, IonInput, IonSpinner, IonButtons, IonButton, IonIcon, IonImg } from '@ionic/angular/standalone';
-import { UserI } from '../common/models/users.models';
-import { FirestoreService } from '../common/services/firestore.service';
+import { UserI } from '../../common/models/users.models';
+import { FirestoreService } from '../../common/services/firestore.service';
 import { FormsModule } from '@angular/forms';
-import { IoniconsModule } from '../common/modules/ionicons.module';
+import { IoniconsModule } from '../../common/modules/ionicons.module';
 
 
 @Component({
@@ -69,7 +69,7 @@ export class HomePage {
   }
 
   async getuser() {
-    const uid = '682cb706-1ba6-4f95-9e44-2095e1eeedef';
+    const uid = 'GpIwz1fhT1QkKu9Uc8pJ';
     // this.firestoreService.getDocumentChanges<UserI>('Usuarios/' + uid).subscribe( data => {
     //   console.log('getuser -> ', data);
     //   if (data) {

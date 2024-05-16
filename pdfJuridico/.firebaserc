@@ -6,9 +6,16 @@
           "clases-develop"
         ]
       }
+    },
+    "pdf-manager-7fbf8": {
+      "hosting": {
+        "app": [
+          "pdf-manager-7fbf8"
+        ]
+      }
     }
   },
   "projects": {
-    "default": "otra-app-645d0"
+    "default": "pdf-manager-7fbf8"
   }
 }
