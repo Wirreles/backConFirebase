@@ -6,6 +6,7 @@ import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } 
 import { FilesComponent } from '../files/files.component';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 
+
 @Component({
   selector: 'app-user-detail',
   standalone: true,
