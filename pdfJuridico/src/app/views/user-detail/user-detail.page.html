@@ -1,0 +1,124 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Editar Usuario</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-segment [(ngModel)]="activeSection">
+    <ion-segment-button value="usuario">
+      <ion-label>Usuario</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="afip">
+      <ion-label>AFIP</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="certificacion-ingresos">
+      <ion-label>Certificación de Ingresos</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="planes-pago">
+      <ion-label>Planes de Pago</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="informacion-personal">
+      <ion-label>Información Personal</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="facturacion">
+      <ion-label>Facturación</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+
+  <div *ngIf="activeSection === 'usuario'">
+    <form [formGroup]="usuarioForm" (ngSubmit)="saveUsuario()">
+      <ion-item>
+        <ion-label position="floating">DNI</ion-label>
+        <ion-input formControlName="dni"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Contraseña</ion-label>
+        <ion-input type="password" formControlName="password"></ion-input>
+      </ion-item>
+      <ion-button expand="block" type="submit" [disabled]="usuarioForm.invalid">Guardar</ion-button>
+    </form>
+  </div>
+
+  <div *ngIf="activeSection === 'afip'">
+    <form [formGroup]="afipForm" (ngSubmit)="saveAfip()">
+      <ion-item>
+        <ion-label position="floating">CUIT</ion-label>
+        <ion-input formControlName="cuit"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Clave Fiscal</ion-label>
+        <ion-input formControlName="claveFiscal"></ion-input>
+      </ion-item>
+      <ion-button expand="block" type="submit" [disabled]="afipForm.invalid">Guardar</ion-button>
+    </form>
+  </div>
+
+  <div *ngIf="activeSection === 'certificacion-ingresos'">
+    <form [formGroup]="certificacionIngresosForm" (ngSubmit)="saveCertificacionIngresos()">
+      <ion-item>
+        <ion-label position="floating">Año</ion-label>
+        <ion-input formControlName="anio"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">PDF</ion-label>
+        <app-form-file #certificacionFile (fileUploadComplete)="handleFileUploadComplete($event, certificacionIngresosForm, 'pdf')"></app-form-file>
+      </ion-item>
+      <ion-button expand="block" type="submit" [disabled]="certificacionIngresosForm.invalid">Guardar</ion-button>
+    </form>
+  </div>
+
+  <div *ngIf="activeSection === 'planes-pago'">
+    <form [formGroup]="planesPagoForm" (ngSubmit)="savePlanesPago()">
+      <ion-item>
+        <ion-label position="floating">PDF</ion-label>
+        <app-form-file #planesPagoFile (fileUploadComplete)="handleFileUploadComplete($event, planesPagoForm, 'pdf')"></app-form-file>
+      </ion-item>
+      <ion-button expand="block" type="submit" [disabled]="planesPagoForm.invalid">Guardar</ion-button>
+    </form>
+  </div>
+
+  <div *ngIf="activeSection === 'informacion-personal'">
+    <form [formGroup]="informacionPersonalForm" (ngSubmit)="saveInformacionPersonal()">
+      <ion-item>
+        <ion-label position="floating">Nombre</ion-label>
+        <ion-input formControlName="nombre"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Apellido</ion-label>
+        <ion-input formControlName="apellido"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Dirección</ion-label>
+        <ion-input formControlName="direccion"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Otros Detalles</ion-label>
+        <ion-input formControlName="otrosDetalles"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">PDF</ion-label>
+        <app-form-file #informacionPersonalFile (fileUploadComplete)="handleFileUploadComplete($event, informacionPersonalForm, 'pdf')"></app-form-file>
+      </ion-item>
+      <ion-button expand="block" type="submit" [disabled]="informacionPersonalForm.invalid">Guardar</ion-button>
+    </form>
+  </div>
+
+  <div *ngIf="activeSection === 'facturacion'">
+    <form [formGroup]="facturacionForm" (ngSubmit)="saveFacturacion()">
+      <ion-item>
+        <ion-label position="floating">Cliente</ion-label>
+        <ion-input formControlName="cliente"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Facturas</ion-label>
+        <ion-input formControlName="facturas"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">PDF</ion-label>
+        <app-form-file #facturacionFile (fileUploadComplete)="handleFileUploadComplete($event, facturacionForm, 'pdf')"></app-form-file>
+      </ion-item>
+      <ion-button expand="block" type="submit" [disabled]="facturacionForm.invalid">Guardar</ion-button>
+    </form>
+  </div>
+</ion-content>

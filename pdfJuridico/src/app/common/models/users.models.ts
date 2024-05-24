@@ -1,5 +1,11 @@
 export interface UserI {
-    nombre: string;
-    edad?: number;
     id: string;
-}
+    nombre: string;
+    apellido: string;
+    direccion: string;
+    dni: string;
+    edad?: number;
+    cuit: string;
+    claveFiscal: string;
+  }
+  
