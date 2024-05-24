@@ -4,8 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { IonicModule, NavController } from '@ionic/angular';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FilesComponent } from '../files/files.component';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
-
+import { FirestoreService } from '../../common/services/firestore.service';
 
 @Component({
   selector: 'app-user-detail',
@@ -36,7 +35,7 @@ export class UserDetailPage implements OnInit {
     private route: ActivatedRoute,
     private navCtrl: NavController,
     private fb: FormBuilder,
-    private firestore: AngularFirestore
+    private firestoreService: FirestoreService
   ) {}
 
   ngOnInit() {
@@ -83,7 +82,7 @@ export class UserDetailPage implements OnInit {
   }
 
   loadUserData() {
-    this.firestore.collection('Usuarios').doc(this.userId).valueChanges().subscribe((userData: any) => {
+    this.firestoreService.getDocumentChanges<any>(`Usuarios/${this.userId}`).subscribe((userData: any) => {
       if (userData) {
         this.usuarioForm.patchValue({
           dni: userData.dni,
@@ -91,69 +90,108 @@ export class UserDetailPage implements OnInit {
         });
 
         this.afipForm.patchValue({
-          cuit: userData.cuit,
-          claveFiscal: userData.claveFiscal,
+          cuit: userData.afip?.cuit,
+          claveFiscal: userData.afip?.claveFiscal,
         });
 
         this.certificacionIngresosForm.patchValue({
-          anio: userData.anio,
-          pdf: userData.certificacionIngresosPdf,
+          anio: userData.certificacionIngresos?.anio,
+          pdf: userData.certificacionIngresos?.pdf,
         });
 
         this.planesPagoForm.patchValue({
-          pdf: userData.planesPagoPdf,
+          pdf: userData.planesPago?.pdf,
         });
 
         this.informacionPersonalForm.patchValue({
-          nombre: userData.nombre,
-          apellido: userData.apellido,
-          direccion: userData.direccion,
-          otrosDetalles: userData.otrosDetalles,
-          pdf: userData.informacionPersonalPdf,
+          nombre: userData.informacionPersonal?.nombre,
+          apellido: userData.informacionPersonal?.apellido,
+          direccion: userData.informacionPersonal?.direccion,
+          otrosDetalles: userData.informacionPersonal?.otrosDetalles,
+          pdf: userData.informacionPersonal?.pdf,
         });
 
         this.facturacionForm.patchValue({
-          cliente: userData.cliente,
-          facturas: userData.facturas,
-          pdf: userData.facturacionPdf,
+          cliente: userData.facturacion?.cliente,
+          facturas: userData.facturacion?.facturas,
+          pdf: userData.facturacion?.pdf,
         });
 
         this.declaracionJuradaForm.patchValue({
-          pdf: userData.declaracionJuradaPdf,
+          pdf: userData.declaracionJurada?.pdf,
         });
       }
     });
   }
 
   saveUsuario() {
-    console.log('Usuario saved', this.usuarioForm.value);
+    this.firestoreService.updateDocument(this.usuarioForm.value, 'Usuarios', this.userId).then(() => {
+      console.log('Usuario saved', this.usuarioForm.value);
+    });
   }
 
-  saveAfip() {
-    console.log('AFIP saved', this.afipForm.value);
+  // saveAfip() {
+  //   this.firestoreService.updateDocument(this.afipForm.value, `Usuarios/${this.userId}/AFIP`, this.userId).then(() => {
+  //     console.log('AFIP saved', this.afipForm.value);
+  //   });
+  // }
+  // saveAfip() {
+  //   const afipDocId = 'nliEzn3Zb3gv71LROyLE';  // Reemplaza con el ID correcto de tu documento
+  //   this.firestoreService.updateDocument(this.afipForm.value, `Usuarios/${this.userId}/AFIP`, afipDocId).then(() => {
+  //     console.log('AFIP saved', this.afipForm.value);
+  //   });
+  // }
+  async saveAfip() {
+    const userIdPath = `Usuarios/${this.userId}`;
+    const afipSubcollection = 'AFIP';
+  
+    // Obtén el ID del documento en la subcolección
+    const afipDocId = await this.firestoreService.getDocumentIdInSubcollection(userIdPath, afipSubcollection);
+    console.log(afipDocId)
+    if (afipDocId) {
+      // Si se encontró el documento, procede a actualizarlo
+      this.firestoreService.updateDocument(this.afipForm.value, `${userIdPath}/${afipSubcollection}`, afipDocId).then(() => {
+        console.log('AFIP saved', this.afipForm.value);
+      });
+    } else {
+      // Maneja el caso en que no se encuentre el documento
+      console.error('No document found in the subcollection');
+    }
   }
 
   saveCertificacionIngresos() {
-    console.log('Certificación de Ingresos saved', this.certificacionIngresosForm.value);
+    this.firestoreService.updateDocument(this.certificacionIngresosForm.value, `Usuarios/${this.userId}/CertificacionIngresos`, this.userId).then(() => {
+      console.log('Certificación de Ingresos saved', this.certificacionIngresosForm.value);
+    });
   }
 
   savePlanesPago() {
-    console.log('Planes de Pago saved', this.planesPagoForm.value);
+    this.firestoreService.updateDocument(this.planesPagoForm.value, `Usuarios/${this.userId}/PlanesPago`, this.userId).then(() => {
+      console.log('Planes de Pago saved', this.planesPagoForm.value);
+    });
   }
 
   saveInformacionPersonal() {
-    console.log('Información Personal saved', this.informacionPersonalForm.value);
+    this.firestoreService.updateDocument(this.informacionPersonalForm.value, `Usuarios/${this.userId}/InformacionPersonal`, this.userId).then(() => {
+      console.log('Información Personal saved', this.informacionPersonalForm.value);
+    });
   }
 
   saveFacturacion() {
-    console.log('Facturación saved', this.facturacionForm.value);
+    this.firestoreService.updateDocument(this.facturacionForm.value, `Usuarios/${this.userId}/Facturacion`, this.userId).then(() => {
+      console.log('Facturación saved', this.facturacionForm.value);
+    });
   }
 
   saveDeclaracionJurada() {
-    console.log('Declaración Jurada saved', this.declaracionJuradaForm.value);
+    this.firestoreService.updateDocument(this.declaracionJuradaForm.value, `Usuarios/${this.userId}/DeclaracionJurada`, this.userId).then(() => {
+      console.log('Declaración Jurada saved', this.declaracionJuradaForm.value);
+    });
   }
 
-  handleFileUploadComplete(event: string, form: FormGroup, controlName: string) {
-    form.patchValue({ [controlName]: event });
+  handleFileUploadComplete(event: any, form: FormGroup, controlName: string) {
+    form.patchValue({
+      [controlName]: event
+    });
   }
 }

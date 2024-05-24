@@ -38,6 +38,7 @@ export class FilesComponent {
         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         this.uploadProgress$ = new Observable(observer => {
           observer.next(progress);
+          observer.complete();  // Completa el observable después de emitir el progreso
         });
         console.log('Progreso de la carga:', progress);
       },

@@ -7,5 +7,6 @@ export interface UserI {
     edad?: number;
     cuit: string;
     claveFiscal: string;
+    password: string;
   }
   

@@ -12,7 +12,8 @@ import {
   DocumentReference,
   DocumentData,
   WithFieldValue,
-  UpdateData
+  UpdateData,
+  getDocs
 } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { v4 as uuidv4 } from 'uuid';
@@ -81,5 +82,28 @@ export class FirestoreService {
 
   async getAuthUser() {
     return { uid: '05OTLvPNICH5Gs9ZsW0k' };
+  }
+
+  async createUserWithSubcollections(userData: any, userId: string): Promise<void> {
+    const userRef = doc(this.firestore, `Usuarios/${userId}`);
+    await setDoc(userRef, userData);
+    
+    // Create subcollections
+    const subcollections = ['certIngreso', 'declaracionJurada', 'facturacion', 'infoPersonal', 'planPago', 'AFIP'];
+    for (const subcollection of subcollections) {
+      const subcollectionRef = doc(collection(userRef, subcollection));
+      await setDoc(subcollectionRef, { initialized: true }); // Puedes añadir datos por defecto aquí
+    }
+  }
+
+  async getDocumentIdInSubcollection(path: string, subcollection: string): Promise<string | null> {
+    const subcollectionRef = collection(this.firestore, `${path}/${subcollection}`);
+    const querySnapshot = await getDocs(subcollectionRef);
+    if (!querySnapshot.empty) {
+      const doc = querySnapshot.docs[0];  // Suponiendo que solo hay un documento
+      return doc.id;
+    } else {
+      return null;
+    }
   }
 }

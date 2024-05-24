@@ -24,6 +24,9 @@
     <ion-segment-button value="facturacion">
       <ion-label>Facturación</ion-label>
     </ion-segment-button>
+    <ion-segment-button value="declaracion-jurada">
+      <ion-label>Declaración Jurada</ion-label>
+    </ion-segment-button>
   </ion-segment>
 
   <div *ngIf="activeSection === 'usuario'">
@@ -34,7 +37,7 @@
       </ion-item>
       <ion-item>
         <ion-label position="floating">Contraseña</ion-label>
-        <ion-input type="password" formControlName="password"></ion-input>
+        <ion-input formControlName="password"></ion-input>
       </ion-item>
       <ion-button expand="block" type="submit" [disabled]="usuarioForm.invalid">Guardar</ion-button>
     </form>
@@ -54,7 +57,22 @@
     </form>
   </div>
 
-  <div *ngIf="activeSection === 'certificacion-ingresos'">
+  <!-- <div *ngIf="activeSection === 'certificacion-ingresos'">
+    <form [formGroup]="certificacionIngresosForm" (ngSubmit)="saveCertificacionIngresos()">
+      <ion-item>
+        <ion-label position="floating">Año</ion-label>
+        <ion-input formControlName="anio"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">PDF</ion-label>
+        <app-form-file #certificacionFile (fileUploadComplete)="handleFileUploadComplete($event, certificacionIngresosForm, 'pdf')"></app-form-file>
+      </ion-item>
+      <ion-button expand="block" type="submit" [disabled]="certificacionIngresosForm.invalid">Guardar</ion-button>
+    </form>
+  </div> -->
+
+   <!-- Section: Certificación de Ingresos -->
+   <div *ngIf="activeSection === 'certificacion-ingresos'">
     <form [formGroup]="certificacionIngresosForm" (ngSubmit)="saveCertificacionIngresos()">
       <ion-item>
         <ion-label position="floating">Año</ion-label>
@@ -119,6 +137,16 @@
         <app-form-file #facturacionFile (fileUploadComplete)="handleFileUploadComplete($event, facturacionForm, 'pdf')"></app-form-file>
       </ion-item>
       <ion-button expand="block" type="submit" [disabled]="facturacionForm.invalid">Guardar</ion-button>
+    </form>
+  </div>
+
+  <div *ngIf="activeSection === 'declaracion-jurada'">
+    <form [formGroup]="declaracionJuradaForm" (ngSubmit)="saveDeclaracionJurada()">
+      <ion-item>
+        <ion-label position="floating">PDF</ion-label>
+        <app-form-file #declaracionJuradaFile (fileUploadComplete)="handleFileUploadComplete($event, declaracionJuradaForm, 'pdf')"></app-form-file>
+      </ion-item>
+      <ion-button expand="block" type="submit" [disabled]="declaracionJuradaForm.invalid">Guardar</ion-button>
     </form>
   </div>
 </ion-content>
