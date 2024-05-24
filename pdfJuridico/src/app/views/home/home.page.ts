@@ -62,11 +62,28 @@ export class HomePage {
     this.newUser = user;
   }
 
-  async delete(user: UserI) {
+  // async delete(user: UserI) {
+  //   this.cargando = true;
+  //   await this.firestoreService.deleteDocumentID('Usuarios', user.id);
+  //   this.cargando = false;
+  // }
+
+
+async delete(user: UserI) {
+  try {
     this.cargando = true;
     await this.firestoreService.deleteDocumentID('Usuarios', user.id);
     this.cargando = false;
+    // this.loadUsers(); 
+  } catch (error) {
+    this.cargando = false;
+    console.error('Error al eliminar usuario:', error);
+    
   }
+}
+
+
+
 
   async getuser() {
     const uid = 'GpIwz1fhT1QkKu9Uc8pJ';

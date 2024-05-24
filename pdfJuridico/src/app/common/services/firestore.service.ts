@@ -58,10 +58,24 @@ export class FirestoreService {
     return updateDoc(document, data)
   }
 
-  deleteDocumentID(enlace: string, idDoc: string) {
+  // deleteDocumentID(enlace: string, idDoc: string) {
+  //   const document = doc(this.firestore, `${enlace}/${idDoc}`);
+  //   return deleteDoc(document);
+  // }
+
+
+deleteDocumentID(enlace: string, idDoc: string): Promise<void> {
+  try {
     const document = doc(this.firestore, `${enlace}/${idDoc}`);
     return deleteDoc(document);
+  } catch (error) {
+    console.error('Error al eliminar documento:', error);
+    throw error; 
   }
+}
+
+
+
 
   deleteDocFromRef(ref: any) {
     return deleteDoc(ref)
