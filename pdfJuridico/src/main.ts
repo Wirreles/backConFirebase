@@ -20,10 +20,15 @@ bootstrapApplication(AppComponent, {
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     provideIonicAngular(),
-    provideRouter(routes), 
-    importProvidersFrom(provideFirebaseApp(() => initializeApp(environment.firebase))),
-    importProvidersFrom(provideAuth(() => getAuth())), 
-    importProvidersFrom(provideFirestore(() => getFirestore())), 
-    importProvidersFrom(provideStorage(() => getStorage())), importProvidersFrom(provideFirebaseApp(() => initializeApp({"projectId":"pdf-manager-7fbf8","appId":"1:775859610688:web:af2da5023833562c5eeba5","storageBucket":"pdf-manager-7fbf8.appspot.com","apiKey":"AIzaSyCFQ1v-2lDvQyCidenRGnREeLyml5s84a8","authDomain":"pdf-manager-7fbf8.firebaseapp.com","messagingSenderId":"775859610688","measurementId":"G-DVHFJGDYQ1"}))), importProvidersFrom(provideAuth(() => getAuth())), importProvidersFrom(provideAnalytics(() => getAnalytics())), ScreenTrackingService, UserTrackingService, importProvidersFrom(provideFirestore(() => getFirestore())), importProvidersFrom(provideStorage(() => getStorage())),
+    provideRouter(routes),
+    importProvidersFrom(
+      provideFirebaseApp(() => initializeApp(environment.firebase)),
+      provideAuth(() => getAuth()),
+      provideFirestore(() => getFirestore()),
+      provideStorage(() => getStorage()),
+      provideAnalytics(() => getAnalytics())
+    ),
+    ScreenTrackingService,
+    UserTrackingService
   ],
 });

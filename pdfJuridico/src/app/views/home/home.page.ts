@@ -1,85 +1,102 @@
-import { Component } from '@angular/core';
-import { IonHeader, IonToolbar, IonTitle, IonContent, IonLabel, IonList, IonItem, IonCard, IonInput, IonSpinner, IonButtons, IonButton, IonIcon, IonImg } from '@ionic/angular/standalone';
-import { UserI } from '../../common/models/users.models';
-import { FirestoreService } from '../../common/services/firestore.service';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IoniconsModule } from '../../common/modules/ionicons.module';
-
+import { IonicModule, NavController } from '@ionic/angular';
+import { FirestoreService } from '../../common/services/firestore.service';
+import { UserI } from '../../common/models/users.models';
 
 @Component({
   selector: 'app-home',
-  templateUrl: 'home.page.html',
-  styleUrls: ['home.page.scss'],
   standalone: true,
-  imports: [IonImg, IonList, IonLabel, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonInput,
-    IonIcon, IonButton, IonButtons, IonSpinner, IonInput, IonCard, 
-    FormsModule,
-    IoniconsModule
-  ],
+  imports: [CommonModule, FormsModule, IonicModule],
+  templateUrl: './home.page.html',
+  styleUrls: ['./home.page.scss'],
 })
-export class HomePage {
-
+export class HomePage implements OnInit {
   users: UserI[] = [];
-
-  newUser: UserI;
+  newUser: UserI = this.initUser();
   cargando: boolean = false;
+  user: UserI | undefined;
+  showForm: boolean = false;
 
-  user: UserI
+  constructor(private firestoreService: FirestoreService, private navCtrl: NavController) {}
 
-
-  constructor(private firestoreService: FirestoreService) {
-    this.loadusers();
-    this.initUser();
-    this.getuser();
+  ngOnInit() {
+    this.loadUsers();
+    this.getUser();
   }
 
-  loadusers() {
-    this.firestoreService.getCollectionChanges<UserI>('Usuarios').subscribe( data => {
+  loadUsers() {
+    this.firestoreService.getCollectionChanges<UserI>('Usuarios').subscribe(data => {
       if (data) {
-        this.users = data
+        this.users = data;
       }
-
-    })
-
+    });
   }
 
-  initUser() {
-    this.newUser = {
-      nombre: null,
-      edad: null,
-      id: this.firestoreService.createIdDoc(),
-    }
+  initUser(): UserI {
+    return {
+      id: this.firestoreService.createIdDoc(), 
+      nombre: '',
+      apellido: '',
+      direccion: '',
+      dni: '',
+      edad: 0,
+      cuit: '',
+      claveFiscal: '',
+    };
   }
 
   async save() {
     this.cargando = true;
-    await this.firestoreService.createDocumentID(this.newUser, 'Usuarios', this.newUser.id)
+    await this.firestoreService.createDocumentWithAutoId(this.newUser, 'Usuarios');
     this.cargando = false;
+    this.newUser = this.initUser();
+    this.showForm = false;
   }
 
-  edit(user: UserI) {
-    console.log('edit -> ', user);
-    this.newUser = user;
+  async edit() {
+    // Obtiene el usuario autenticado
+    const authUser = await this.firestoreService.getAuthUser();
+    if (authUser) {
+      // Obtiene el UID del usuario autenticado
+      const uid = authUser.uid;
+      // Navega a la URL con el ID del usuario
+      this.navCtrl.navigateForward(`/home/${uid}`);
+    } else {
+      // Manejo de error si no hay usuario autenticado
+      console.error('No authenticated user found');
+    }
   }
+  
 
   async delete(user: UserI) {
+    const authUser = await this.firestoreService.getAuthUser();
+    // Obtiene el UID del usuario autenticado
+    const uid = authUser.uid;  
     this.cargando = true;
-    await this.firestoreService.deleteDocumentID('Usuarios', user.id);
+    await this.firestoreService.deleteDocumentID('Usuarios', uid);
     this.cargando = false;
   }
 
-  async getuser() {
-    const uid = 'GpIwz1fhT1QkKu9Uc8pJ';
-    // this.firestoreService.getDocumentChanges<UserI>('Usuarios/' + uid).subscribe( data => {
-    //   console.log('getuser -> ', data);
-    //   if (data) {
-    //     this.user = data
-    //   }
-    // })
-
-    const res = await this.firestoreService.getDocument<UserI>('Usuarios/' + uid);
-    this.user = res.data()
+  async getUser() {
+    const authUser = await this.firestoreService.getAuthUser();
+    if (authUser) {
+      const uid = authUser.uid;
+      const res = await this.firestoreService.getDocument<UserI>('Usuarios/' + uid);
+      this.user = res['data']();
+    }
   }
 
+  toggleForm() {
+    this.showForm = !this.showForm;
+  }
 
+  navigateToPage(page: string) {
+    // Implementa la lógica de navegación aquí
+  }
+
+  goBack() {
+    window.history.back();
+  }
 }

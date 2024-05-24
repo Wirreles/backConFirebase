@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import { FilesComponent } from './views/files/files.component';
 
 export const routes: Routes = [
   {
@@ -7,8 +6,8 @@ export const routes: Routes = [
     loadComponent: () => import('./views/home/home.page').then((m) => m.HomePage),
   },
   {
-    path: 'files',
-    component: FilesComponent
+    path: 'home/:id',
+    loadComponent: () => import('./views/user-detail/user-detail.page').then((m) => m.UserDetailPage),
   },
   {
     path: '',
