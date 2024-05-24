@@ -61,12 +61,29 @@ export class HomePage implements OnInit {
   }
   
 
-  async delete(user: UserI) {
+  // async delete(user: UserI) {
+  //   this.cargando = true;
+  //   await this.firestoreService.deleteDocumentID('Usuarios', user.id);
+  //   this.cargando = false;
+  // }
+
+
+async delete(user: UserI) {
+  try {
     this.cargando = true;
     console.log(user.id)
     await this.firestoreService.deleteDocumentID('Usuarios', user.id);
     this.cargando = false;
+    // this.loadUsers(); 
+  } catch (error) {
+    this.cargando = false;
+    console.error('Error al eliminar usuario:', error);
+    
   }
+}
+
+
+
 
   async getUser() {
     const authUser = await this.firestoreService.getAuthUser();
