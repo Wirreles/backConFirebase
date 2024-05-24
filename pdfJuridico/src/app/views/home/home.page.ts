@@ -55,27 +55,16 @@ export class HomePage implements OnInit {
     this.showForm = false;
   }
 
-  async edit() {
-    // Obtiene el usuario autenticado
-    const authUser = await this.firestoreService.getAuthUser();
-    if (authUser) {
-      // Obtiene el UID del usuario autenticado
-      const uid = authUser.uid;
-      // Navega a la URL con el ID del usuario
-      this.navCtrl.navigateForward(`/home/${uid}`);
-    } else {
-      // Manejo de error si no hay usuario autenticado
-      console.error('No authenticated user found');
-    }
+  async edit(user: UserI) {
+    console.log(user.id)
+    this.navCtrl.navigateForward(`/home/${user.id}`);
   }
   
 
   async delete(user: UserI) {
-    const authUser = await this.firestoreService.getAuthUser();
-    // Obtiene el UID del usuario autenticado
-    const uid = authUser.uid;  
     this.cargando = true;
-    await this.firestoreService.deleteDocumentID('Usuarios', uid);
+    console.log(user.id)
+    await this.firestoreService.deleteDocumentID('Usuarios', user.id);
     this.cargando = false;
   }
 
