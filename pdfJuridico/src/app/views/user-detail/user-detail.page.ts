@@ -1,15 +1,16 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { IonicModule, NavController } from '@ionic/angular';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { FilesComponent } from '../files/files.component';
+import { Storage, getDownloadURL, ref, uploadBytesResumable } from '@angular/fire/storage';
 import { FirestoreService } from '../../common/services/firestore.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-user-detail',
   standalone: true,
-  imports: [CommonModule, IonicModule, FormsModule, ReactiveFormsModule, FilesComponent],
+  imports: [CommonModule, IonicModule, FormsModule, ReactiveFormsModule],
   templateUrl: './user-detail.page.html',
   styleUrls: ['./user-detail.page.scss'],
 })
@@ -25,17 +26,15 @@ export class UserDetailPage implements OnInit {
   facturacionForm: FormGroup;
   declaracionJuradaForm: FormGroup;
 
-  @ViewChild('certificacionFile') certificacionFile: FilesComponent;
-  @ViewChild('planesPagoFile') planesPagoFile: FilesComponent;
-  @ViewChild('informacionPersonalFile') informacionPersonalFile: FilesComponent;
-  @ViewChild('facturacionFile') facturacionFile: FilesComponent;
-  @ViewChild('declaracionJuradaFile') declaracionJuradaFile: FilesComponent;
+  uploadProgress$: Observable<number>;
+  downloadURL$: Observable<string>;
 
   constructor(
     private route: ActivatedRoute,
     private navCtrl: NavController,
     private fb: FormBuilder,
-    private firestoreService: FirestoreService
+    private firestoreService: FirestoreService,
+    private storage: Storage // Añade esta línea para el servicio de almacenamiento
   ) {}
 
   ngOnInit() {
@@ -124,74 +123,129 @@ export class UserDetailPage implements OnInit {
     });
   }
 
+  async uploadFile(event: any, form: FormGroup, controlName: string) {
+    const archivoSeleccionado: File = event.target.files[0];
+    const filePath = `archivos/${archivoSeleccionado.name}`;
+    const fileRef = ref(this.storage, filePath);
+    const uploadFile = uploadBytesResumable(fileRef, archivoSeleccionado);
+
+    uploadFile.on('state_changed',
+      (snapshot) => {
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        this.uploadProgress$ = new Observable(observer => {
+          observer.next(progress);
+          observer.complete();
+        });
+        console.log('Progreso de la carga:', progress);
+      },
+      (error) => {
+        console.error('Error al cargar el archivo:', error);
+      },
+      async () => {
+        console.log("El archivo se subió exitosamente!");
+        const url = await getDownloadURL(fileRef);
+        console.log("URL del archivo: ", url);
+        form.patchValue({
+          [controlName]: url
+        });
+      }
+    );
+  }
+
   saveUsuario() {
     this.firestoreService.updateDocument(this.usuarioForm.value, 'Usuarios', this.userId).then(() => {
       console.log('Usuario saved', this.usuarioForm.value);
     });
   }
 
-  // saveAfip() {
-  //   this.firestoreService.updateDocument(this.afipForm.value, `Usuarios/${this.userId}/AFIP`, this.userId).then(() => {
-  //     console.log('AFIP saved', this.afipForm.value);
-  //   });
-  // }
-  // saveAfip() {
-  //   const afipDocId = 'nliEzn3Zb3gv71LROyLE';  // Reemplaza con el ID correcto de tu documento
-  //   this.firestoreService.updateDocument(this.afipForm.value, `Usuarios/${this.userId}/AFIP`, afipDocId).then(() => {
-  //     console.log('AFIP saved', this.afipForm.value);
-  //   });
-  // }
   async saveAfip() {
     const userIdPath = `Usuarios/${this.userId}`;
     const afipSubcollection = 'AFIP';
   
-    // Obtén el ID del documento en la subcolección
     const afipDocId = await this.firestoreService.getDocumentIdInSubcollection(userIdPath, afipSubcollection);
     console.log(afipDocId)
     if (afipDocId) {
-      // Si se encontró el documento, procede a actualizarlo
       this.firestoreService.updateDocument(this.afipForm.value, `${userIdPath}/${afipSubcollection}`, afipDocId).then(() => {
         console.log('AFIP saved', this.afipForm.value);
       });
     } else {
-      // Maneja el caso en que no se encuentre el documento
       console.error('No document found in the subcollection');
     }
   }
 
-  saveCertificacionIngresos() {
-    this.firestoreService.updateDocument(this.certificacionIngresosForm.value, `Usuarios/${this.userId}/CertificacionIngresos`, this.userId).then(() => {
-      console.log('Certificación de Ingresos saved', this.certificacionIngresosForm.value);
-    });
+  async saveCertificacionIngresos() {
+    const userIdPath = `Usuarios/${this.userId}`;
+    const subcollection = 'certIngreso';
+
+    const docId = await this.firestoreService.getDocumentIdInSubcollection(userIdPath, subcollection);
+    console.log(docId)
+    if (docId) {
+      this.firestoreService.updateDocument(this.certificacionIngresosForm.value, `${userIdPath}/${subcollection}`, docId).then(() => {
+        console.log('Certificación de Ingresos saved', this.certificacionIngresosForm.value);
+      });
+    } else {
+      console.error('No document found in the subcollection');
+    }
   }
 
-  savePlanesPago() {
-    this.firestoreService.updateDocument(this.planesPagoForm.value, `Usuarios/${this.userId}/PlanesPago`, this.userId).then(() => {
-      console.log('Planes de Pago saved', this.planesPagoForm.value);
-    });
+  // Similar functions for other forms
+  async savePlanesPago() {
+    const userIdPath = `Usuarios/${this.userId}`;
+    const subcollection = 'planPago';
+
+    const docId = await this.firestoreService.getDocumentIdInSubcollection(userIdPath, subcollection);
+    console.log(docId)
+    if (docId) {
+      this.firestoreService.updateDocument(this.planesPagoForm.value, `${userIdPath}/${subcollection}`, docId).then(() => {
+        console.log('Planes de Pago saved', this.planesPagoForm.value);
+      });
+    } else {
+      console.error('No document found in the subcollection');
+    }
   }
 
-  saveInformacionPersonal() {
-    this.firestoreService.updateDocument(this.informacionPersonalForm.value, `Usuarios/${this.userId}/InformacionPersonal`, this.userId).then(() => {
-      console.log('Información Personal saved', this.informacionPersonalForm.value);
-    });
+  async saveInformacionPersonal() {
+    const userIdPath = `Usuarios/${this.userId}`;
+    const subcollection = 'infoPersonal';
+
+    const docId = await this.firestoreService.getDocumentIdInSubcollection(userIdPath, subcollection);
+    console.log(docId)
+    if (docId) {
+      this.firestoreService.updateDocument(this.informacionPersonalForm.value, `${userIdPath}/${subcollection}`, docId).then(() => {
+        console.log('Información Personal saved', this.informacionPersonalForm.value);
+      });
+    } else {
+      console.error('No document found in the subcollection');
+    }
   }
 
-  saveFacturacion() {
-    this.firestoreService.updateDocument(this.facturacionForm.value, `Usuarios/${this.userId}/Facturacion`, this.userId).then(() => {
-      console.log('Facturación saved', this.facturacionForm.value);
-    });
+  async saveFacturacion() {
+    const userIdPath = `Usuarios/${this.userId}`;
+    const subcollection = 'facturacion';
+
+    const docId = await this.firestoreService.getDocumentIdInSubcollection(userIdPath, subcollection);
+    console.log(docId)
+    if (docId) {
+      this.firestoreService.updateDocument(this.facturacionForm.value, `${userIdPath}/${subcollection}`, docId).then(() => {
+        console.log('Facturación saved', this.facturacionForm.value);
+      });
+    } else {
+      console.error('No document found in the subcollection');
+    }
   }
 
-  saveDeclaracionJurada() {
-    this.firestoreService.updateDocument(this.declaracionJuradaForm.value, `Usuarios/${this.userId}/DeclaracionJurada`, this.userId).then(() => {
-      console.log('Declaración Jurada saved', this.declaracionJuradaForm.value);
-    });
-  }
+  async saveDeclaracionJurada() {
+    const userIdPath = `Usuarios/${this.userId}`;
+    const subcollection = 'declaracionJurada';
 
-  handleFileUploadComplete(event: any, form: FormGroup, controlName: string) {
-    form.patchValue({
-      [controlName]: event
-    });
+    const docId = await this.firestoreService.getDocumentIdInSubcollection(userIdPath, subcollection);
+    console.log(docId)
+    if (docId) {
+      this.firestoreService.updateDocument(this.declaracionJuradaForm.value, `${userIdPath}/${subcollection}`, docId).then(() => {
+        console.log('Declaración Jurada saved', this.declaracionJuradaForm.value);
+      });
+    } else {
+      console.error('No document found in the subcollection');
+    }
   }
 }
