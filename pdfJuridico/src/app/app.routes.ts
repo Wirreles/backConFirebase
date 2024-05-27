@@ -9,6 +9,10 @@ export const routes: Routes = [
     path: 'home/:id',
     loadComponent: () => import('./views/user-detail/user-detail.page').then((m) => m.UserDetailPage),
   },
+   {
+    path: 'ver-usuario/:id', 
+    loadComponent: () => import('./views/ver-usuario/ver-usuario.component').then(m => m.VerUsuarioComponent)
+  },
   {
     path: '',
     redirectTo: 'home',

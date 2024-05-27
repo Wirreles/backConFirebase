@@ -1,0 +1,31 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Ver Usuario</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div *ngIf="usuario">
+    <h2>Datos del Usuario</h2>
+    <p><strong>DNI:</strong> {{ usuario.dni }}</p>
+    <p><strong>Nombre:</strong> {{ usuario.infoPersonal?.nombre }}</p> <p><strong>Apellido:</strong> {{ usuario.infoPersonal?.apellido }}</p>
+    <p><strong>Dirección:</strong> {{ usuario.infoPersonal?.direccion }}</p>
+
+    <h3>AFIP</h3>
+    <p><strong>CUIT:</strong> {{ usuario.afip?.cuit }}</p> 
+    <p><strong>Clave Fiscal:</strong> {{ usuario.afip?.claveFiscal }}</p>
+
+    <h3>Certificación de Ingresos</h3>
+    <p *ngIf="usuario.certIngreso"><strong>Año:</strong> {{ usuario.certIngreso.anio }}</p>
+    
+    <h3>Declaración Jurada</h3>
+    <p *ngIf="usuario.declaracionJurada">
+      <a [href]="usuario.declaracionJurada.pdf" target="_blank">Ver Declaración Jurada</a>
+    </p>
+
+    </div>
+
+  <div *ngIf="!usuario">
+    <p>Cargando datos del usuario...</p>
+  </div>
+</ion-content>

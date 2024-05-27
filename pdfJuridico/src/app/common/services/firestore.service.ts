@@ -47,9 +47,10 @@ export class FirestoreService {
   }
 
   getCollectionChanges<T>(path: string): Observable<T[]> {
-    const itemCollection = collection(this.firestore, path).withConverter(converter<T>());
-    return collectionData(itemCollection, { idField: 'id' }) as Observable<T[]>; // Usar 'id' como idField
+    const itemCollection = collection(this.firestore, path);
+    return collectionData(itemCollection, { idField: 'id' }) as Observable<T[]>;
   }
+
   createDocument<T>(data: T, enlace: string): Promise<void> {
     const document = docWithConverter<T>(this.firestore, enlace);
     return setDoc(document, data);
@@ -105,4 +106,20 @@ export class FirestoreService {
       return null;
     }
   }
+
+
+
+//obtener el documento del usuario
+ public async getDocumentById<T>(collectionPath: string, documentId: string): Promise<DocumentData | undefined> {
+    try {
+      const docRef = doc(this.firestore, collectionPath, documentId);
+      const docSnap = await getDoc(docRef);
+      return docSnap.exists() ? docSnap.data() : undefined;
+    } catch (error) {
+      console.error("Error al obtener el documento:", error);
+      throw error; // Relanza el error para manejarlo en el componente
+    }
+  }
+
+
 }

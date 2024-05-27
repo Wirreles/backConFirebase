@@ -9,7 +9,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-toolbar color="tertiary">
+<!-- <ion-toolbar color="tertiary">
   <ion-title style="text-align: center;">
     <ion-icon name="home" (click)="navigateToPage('home')" class="icon"></ion-icon>
     <ion-icon name="people-circle-outline" (click)="navigateToPage('user-management')" class="icon"></ion-icon>
@@ -18,7 +18,7 @@
     <ion-icon name="people-outline" (click)="navigateToPage('personal-info')" class="icon"></ion-icon>
     <ion-icon name="dice-outline" (click)="navigateToPage('payment-plans')" class="icon"></ion-icon>
   </ion-title>
-</ion-toolbar>
+</ion-toolbar> -->
 
 <ion-content class="ion-padding">
   <div style="margin: 20px;">
@@ -87,6 +87,11 @@
         <ion-button (click)="delete(user)">
           <ion-icon slot="icon-only" name="trash" class="danger"></ion-icon>
         </ion-button>
+
+ <ion-button class="primary" (click)="ver(user)">
+          <ion-icon slot="icon-only" name="create" class="secondary"></ion-icon>
+        </ion-button>
+
       </ion-buttons>
     </ion-item>
   </ion-list>
