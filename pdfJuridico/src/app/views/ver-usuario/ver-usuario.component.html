@@ -8,21 +8,30 @@
   <div *ngIf="usuario">
     <h2>Datos del Usuario</h2>
     <p><strong>DNI:</strong> {{ usuario.dni }}</p>
-    <p><strong>Nombre:</strong> {{ usuario.infoPersonal?.nombre }}</p> <p><strong>Apellido:</strong> {{ usuario.infoPersonal?.apellido }}</p>
-    <p><strong>Dirección:</strong> {{ usuario.infoPersonal?.direccion }}</p>
+    <p><strong>Nombre:</strong> {{ usuario.nombre }}</p>
+    <p><strong>Apellido:</strong> {{ usuario.apellido }}</p>
+    <p><strong>Dirección:</strong> {{ usuario.direccion }}</p>
 
     <h3>AFIP</h3>
-    <p><strong>CUIT:</strong> {{ usuario.afip?.cuit }}</p> 
-    <p><strong>Clave Fiscal:</strong> {{ usuario.afip?.claveFiscal }}</p>
+    <p><strong>CUIT:</strong> {{ usuario.AFIP?.cuit }}</p>
+    <p><strong>Clave Fiscal:</strong> {{ usuario.AFIP?.claveFiscal }}</p>
 
     <h3>Certificación de Ingresos</h3>
     <p *ngIf="usuario.certIngreso"><strong>Año:</strong> {{ usuario.certIngreso.anio }}</p>
-    
+
     <h3>Declaración Jurada</h3>
     <p *ngIf="usuario.declaracionJurada">
       <a [href]="usuario.declaracionJurada.pdf" target="_blank">Ver Declaración Jurada</a>
     </p>
 
+    <h3>Facturacion</h3>
+    <p *ngIf="usuario.facturacion">
+      <a [href]="usuario.facturacion.pdf" target="_blank">Ver Facturacion</a>
+    </p>
+    <h3>Plan de Pago</h3>
+    <p *ngIf="usuario.planPago">
+      <a [href]="usuario.planPago.pdf" target="_blank">Ver Plan de Pago</a>
+    </p>
     </div>
 
   <div *ngIf="!usuario">

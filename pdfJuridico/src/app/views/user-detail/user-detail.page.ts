@@ -25,16 +25,14 @@ export class UserDetailPage implements OnInit {
   informacionPersonalForm: FormGroup;
   facturacionForm: FormGroup;
   declaracionJuradaForm: FormGroup;
-  selectedFile: File | null = null;
   uploadProgress$: Observable<number>;
-  downloadURL$: Observable<string>;
 
   constructor(
     private route: ActivatedRoute,
     private navCtrl: NavController,
     private fb: FormBuilder,
     private firestoreService: FirestoreService,
-    private storage: Storage // Añade esta línea para el servicio de almacenamiento
+    private storage: Storage
   ) {}
 
   ngOnInit() {
@@ -81,7 +79,6 @@ export class UserDetailPage implements OnInit {
   }
 
   loadUserData() {
-
     this.firestoreService.getDocumentChanges<any>(`Usuarios/${this.userId}`).subscribe((userData: any) => {
       if (userData) {
         this.usuarioForm.patchValue({
@@ -123,14 +120,13 @@ export class UserDetailPage implements OnInit {
       }
     });
   }
-
   async uploadFile(event: any, form: FormGroup, controlName: string) {
-    const archivoSeleccionado: File = event.target.files[0];
-    const filePath = `archivos/${archivoSeleccionado.name}`;
+    const selectedFile: File = event.target.files[0];
+    const filePath = `archivos/${selectedFile.name}`;
     const fileRef = ref(this.storage, filePath);
-    const uploadFile = uploadBytesResumable(fileRef, archivoSeleccionado);
+    const uploadTask = uploadBytesResumable(fileRef, selectedFile);
 
-    uploadFile.on('state_changed',
+    uploadTask.on('state_changed',
       (snapshot) => {
         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         this.uploadProgress$ = new Observable(observer => {
@@ -143,9 +139,8 @@ export class UserDetailPage implements OnInit {
         console.error('Error al cargar el archivo:', error);
       },
       async () => {
-        console.log("El archivo se subió exitosamente!");
         const url = await getDownloadURL(fileRef);
-        console.log("URL del archivo: ", url);
+        console.log('URL del archivo:', url);
         form.patchValue({
           [controlName]: url
         });
@@ -155,98 +150,43 @@ export class UserDetailPage implements OnInit {
 
   saveUsuario() {
     this.firestoreService.updateDocument(this.usuarioForm.value, 'Usuarios', this.userId).then(() => {
-      console.log('Usuario saved', this.usuarioForm.value);
+      console.log('Usuario guardado', this.usuarioForm.value);
     });
   }
 
   async saveAfip() {
-    const userIdPath = `Usuarios/${this.userId}`;
-    const afipSubcollection = 'AFIP';
-
-    const afipDocId = await this.firestoreService.getDocumentIdInSubcollection(userIdPath, afipSubcollection);
-    console.log(afipDocId)
-    if (afipDocId) {
-      this.firestoreService.updateDocument(this.afipForm.value, `${userIdPath}/${afipSubcollection}`, afipDocId).then(() => {
-        console.log('AFIP saved', this.afipForm.value);
-      });
-    } else {
-      console.error('No document found in the subcollection');
-    }
+    await this.saveSubcollectionData(this.afipForm, 'AFIP');
   }
 
   async saveCertificacionIngresos() {
-    const userIdPath = `Usuarios/${this.userId}`;
-    const subcollection = 'certIngreso';
-
-    const docId = await this.firestoreService.getDocumentIdInSubcollection(userIdPath, subcollection);
-    console.log(docId)
-    if (docId) {
-      this.firestoreService.updateDocument(this.certificacionIngresosForm.value, `${userIdPath}/${subcollection}`, docId).then(() => {
-        console.log('Certificación de Ingresos saved', this.certificacionIngresosForm.value);
-      });
-    } else {
-      console.error('No document found in the subcollection');
-    }
+    await this.saveSubcollectionData(this.certificacionIngresosForm, 'certIngreso');
   }
 
-
   async savePlanesPago() {
-    const userIdPath = `Usuarios/${this.userId}`;
-    const subcollection = 'planPago';
-
-    const docId = await this.firestoreService.getDocumentIdInSubcollection(userIdPath, subcollection);
-    console.log(docId)
-    if (docId) {
-      this.firestoreService.updateDocument(this.planesPagoForm.value, `${userIdPath}/${subcollection}`, docId).then(() => {
-        console.log('Planes de Pago saved', this.planesPagoForm.value);
-      });
-    } else {
-      console.error('No document found in the subcollection');
-    }
+    await this.saveSubcollectionData(this.planesPagoForm, 'planPago');
   }
 
   async saveInformacionPersonal() {
-    const userIdPath = `Usuarios/${this.userId}`;
-    const subcollection = 'infoPersonal';
-
-    const docId = await this.firestoreService.getDocumentIdInSubcollection(userIdPath, subcollection);
-    console.log(docId)
-    if (docId) {
-      this.firestoreService.updateDocument(this.informacionPersonalForm.value, `${userIdPath}/${subcollection}`, docId).then(() => {
-        console.log('Información Personal saved', this.informacionPersonalForm.value);
-      });
-    } else {
-      console.error('No document found in the subcollection');
-    }
+    await this.saveSubcollectionData(this.informacionPersonalForm, 'infoPersonal');
   }
 
   async saveFacturacion() {
-    const userIdPath = `Usuarios/${this.userId}`;
-    const subcollection = 'facturacion';
-
-    const docId = await this.firestoreService.getDocumentIdInSubcollection(userIdPath, subcollection);
-    console.log(docId)
-    if (docId) {
-      this.firestoreService.updateDocument(this.facturacionForm.value, `${userIdPath}/${subcollection}`, docId).then(() => {
-        console.log('Facturación saved', this.facturacionForm.value);
-      });
-    } else {
-      console.error('No document found in the subcollection');
-    }
+    await this.saveSubcollectionData(this.facturacionForm, 'facturacion');
   }
 
   async saveDeclaracionJurada() {
-    const userIdPath = `Usuarios/${this.userId}`;
-    const subcollection = 'declaracionJurada';
+    await this.saveSubcollectionData(this.declaracionJuradaForm, 'declaracionJurada');
+  }
 
+  private async saveSubcollectionData(form: FormGroup, subcollection: string) {
+    const userIdPath = `Usuarios/${this.userId}`;
     const docId = await this.firestoreService.getDocumentIdInSubcollection(userIdPath, subcollection);
-    console.log(docId)
     if (docId) {
-      this.firestoreService.updateDocument(this.declaracionJuradaForm.value, `${userIdPath}/${subcollection}`, docId).then(() => {
-        console.log('Declaración Jurada saved', this.declaracionJuradaForm.value);
+      this.firestoreService.updateDocument(form.value, `${userIdPath}/${subcollection}`, docId).then(() => {
+        console.log(`${subcollection} guardado`, form.value);
       });
     } else {
-      console.error('No document found in the subcollection');
+      console.error(`No se encontró documento en la subcolección ${subcollection}`);
     }
   }
 }

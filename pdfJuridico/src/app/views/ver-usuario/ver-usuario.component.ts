@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { FirestoreService } from '../../common/services/firestore.service'; 
-import { doc, getDoc } from 'firebase/firestore'; 
+import { FirestoreService } from '../../common/services/firestore.service';
+import { doc, getDoc } from 'firebase/firestore';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular'; // Importar IonicModule
 
@@ -16,11 +16,11 @@ import { IonicModule } from '@ionic/angular'; // Importar IonicModule
 })
 export class VerUsuarioComponent implements OnInit {
   userId: string;
-  // usuario: any; 
+  // usuario: any;
 
 
 usuario: any = {};
-  subcollections = ['afip', 'certIngreso', 'declaracionJurada', 'facturacion', 'infoPersonal', 'planPago'];
+  subcollections = ['AFIP', 'certIngreso', 'declaracionJurada', 'facturacion', 'infoPersonal', 'planPago'];
 
 
   constructor(
@@ -41,21 +41,21 @@ usuario: any = {};
       console.log('Documento del usuario:', usuarioDoc); // Agrega esta línea para verificar el documento
 
       if (usuarioDoc) {
-        this.usuario = usuarioDoc; 
+        this.usuario = usuarioDoc;
 
         // Cargar datos de subcolecciones
         for (const subcollection of this.subcollections) {
           const subcollectionId = await this.firestoreService.getDocumentIdInSubcollection(`Usuarios/${this.userId}`, subcollection);
           if (subcollectionId) {
             const subcollectionData = await this.firestoreService.getDocumentById(`Usuarios/${this.userId}/${subcollection}`, subcollectionId);
-            this.usuario[subcollection] = subcollectionData; 
+            this.usuario[subcollection] = subcollectionData;
           }
         }
       } else {
         console.error('No se encontró el usuario');
       }
 
-      this.cdr.detectChanges(); 
+      this.cdr.detectChanges();
     } catch (error) {
       console.error("Error al cargar los datos del usuario:", error);
     }
