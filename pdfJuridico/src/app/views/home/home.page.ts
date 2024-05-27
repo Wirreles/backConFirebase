@@ -43,17 +43,32 @@ export class HomePage {
 
   }
 
-  initUser() {
-    this.newUser = {
-      nombre: null,
-      edad: null,
-      id: this.firestoreService.createIdDoc(),
-    }
+  initUser(): UserI {
+    return {
+      id: this.firestoreService.createIdDoc(), 
+      nombre: '',
+      apellido: '',
+      direccion: '',
+      dni: '',
+      edad: 0,
+      cuit: '',
+      claveFiscal: '',
+      password: '',
+    };
   }
+
+  // async save() {
+  //   this.cargando = true;
+  //   await this.firestoreService.createDocumentWithAutoId(this.newUser, 'Usuarios');
+  //   this.cargando = false;
+  //   this.newUser = this.initUser();
+  //   this.showForm = false;
+  // }
 
   async save() {
     this.cargando = true;
-    await this.firestoreService.createDocumentID(this.newUser, 'Usuarios', this.newUser.id)
+    const userId = this.newUser.id;
+    await this.firestoreService.createUserWithSubcollections(this.newUser, userId);
     this.cargando = false;
   }
 
