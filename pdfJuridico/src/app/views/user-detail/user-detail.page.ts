@@ -25,7 +25,7 @@ export class UserDetailPage implements OnInit {
   informacionPersonalForm: FormGroup;
   facturacionForm: FormGroup;
   declaracionJuradaForm: FormGroup;
-
+  selectedFile: File | null = null;
   uploadProgress$: Observable<number>;
   downloadURL$: Observable<string>;
 
@@ -161,7 +161,7 @@ export class UserDetailPage implements OnInit {
   async saveAfip() {
     const userIdPath = `Usuarios/${this.userId}`;
     const afipSubcollection = 'AFIP';
-  
+
     const afipDocId = await this.firestoreService.getDocumentIdInSubcollection(userIdPath, afipSubcollection);
     console.log(afipDocId)
     if (afipDocId) {
@@ -188,7 +188,7 @@ export class UserDetailPage implements OnInit {
     }
   }
 
-  // Similar functions for other forms
+
   async savePlanesPago() {
     const userIdPath = `Usuarios/${this.userId}`;
     const subcollection = 'planPago';

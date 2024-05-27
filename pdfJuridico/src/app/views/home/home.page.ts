@@ -36,7 +36,7 @@ export class HomePage implements OnInit {
 
   initUser(): UserI {
     return {
-      id: this.firestoreService.createIdDoc(), 
+      id: this.firestoreService.createIdDoc(),
       nombre: '',
       apellido: '',
       direccion: '',
@@ -47,14 +47,6 @@ export class HomePage implements OnInit {
       password: '',
     };
   }
-
-  // async save() {
-  //   this.cargando = true;
-  //   await this.firestoreService.createDocumentWithAutoId(this.newUser, 'Usuarios');
-  //   this.cargando = false;
-  //   this.newUser = this.initUser();
-  //   this.showForm = false;
-  // }
 
   async save() {
     this.cargando = true;
@@ -69,13 +61,6 @@ export class HomePage implements OnInit {
     console.log(user.id)
     this.navCtrl.navigateForward(`/home/${user.id}`);
   }
-  
-
-  // async delete(user: UserI) {
-  //   this.cargando = true;
-  //   await this.firestoreService.deleteDocumentID('Usuarios', user.id);
-  //   this.cargando = false;
-  // }
 
 
 async delete(user: UserI) {
@@ -84,16 +69,13 @@ async delete(user: UserI) {
     console.log(user.id)
     await this.firestoreService.deleteDocumentID('Usuarios', user.id);
     this.cargando = false;
-    // this.loadUsers(); 
+    // this.loadUsers();
   } catch (error) {
     this.cargando = false;
     console.error('Error al eliminar usuario:', error);
-    
+
   }
 }
-
-
-
 
   async getUser() {
     const authUser = await this.firestoreService.getAuthUser();
