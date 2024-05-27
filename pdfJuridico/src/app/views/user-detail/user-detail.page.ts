@@ -81,6 +81,7 @@ export class UserDetailPage implements OnInit {
   }
 
   loadUserData() {
+
     this.firestoreService.getDocumentChanges<any>(`Usuarios/${this.userId}`).subscribe((userData: any) => {
       if (userData) {
         this.usuarioForm.patchValue({

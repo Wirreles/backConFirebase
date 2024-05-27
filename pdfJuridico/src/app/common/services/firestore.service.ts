@@ -106,4 +106,20 @@ export class FirestoreService {
       return null;
     }
   }
+
+
+
+//obtener el documento del usuario
+ public async getDocumentById<T>(collectionPath: string, documentId: string): Promise<DocumentData | undefined> {
+    try {
+      const docRef = doc(this.firestore, collectionPath, documentId);
+      const docSnap = await getDoc(docRef);
+      return docSnap.exists() ? docSnap.data() : undefined;
+    } catch (error) {
+      console.error("Error al obtener el documento:", error);
+      throw error; // Relanza el error para manejarlo en el componente
+    }
+  }
+
+
 }

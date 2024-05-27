@@ -1,4 +1,5 @@
 export interface InformacionPersonalI {
+  id: string; 
     nombre: string;
     apellido: string;
     direccion: string;

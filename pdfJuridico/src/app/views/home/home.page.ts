@@ -94,6 +94,11 @@ async delete(user: UserI) {
     // Implementa la lógica de navegación aquí
   }
 
+  ver(user: UserI) {
+  this.navCtrl.navigateForward(`/ver-usuario/${user.id}`); 
+}
+
+
   goBack() {
     window.history.back();
   }
