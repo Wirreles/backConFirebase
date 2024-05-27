@@ -40,21 +40,13 @@
       <ion-label>Dirección</ion-label>
       <ion-input [(ngModel)]="newUser.direccion"></ion-input>
     </ion-item>
-    <ion-item>
+    <!-- <ion-item>
       <ion-label>DNI</ion-label>
       <ion-input [(ngModel)]="newUser.dni"></ion-input>
-    </ion-item>
+    </ion-item> -->
     <ion-item>
       <ion-label>Edad</ion-label>
       <ion-input [(ngModel)]="newUser.edad" type="number"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label>CUIT</ion-label>
-      <ion-input [(ngModel)]="newUser.cuit"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label>Clave Fiscal</ion-label>
-      <ion-input [(ngModel)]="newUser.claveFiscal"></ion-input>
     </ion-item>
   </ion-card>
 
@@ -76,9 +68,6 @@
         <p>Dirección: {{ user.direccion }}</p>
         <p>DNI: {{ user.dni }}</p>
         <p>Edad: {{ user.edad }}</p>
-        <p>CUIT: {{ user.cuit }}</p>
-        <p>Clave Fiscal: {{ user.claveFiscal }}</p>
-        <p>ID: {{user.id}}</p>
       </ion-label>
       <ion-buttons slot="end">
         <ion-button class="primary" (click)="edit(user)">
