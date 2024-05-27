@@ -5,25 +5,38 @@
 </ion-header>
 
 <ion-content>
-  <div *ngIf="usuario">
+  <div *ngIf="usuario"> 
     <h2>Datos del Usuario</h2>
     <p><strong>DNI:</strong> {{ usuario.dni }}</p>
-    <p><strong>Nombre:</strong> {{ usuario.infoPersonal?.nombre }}</p> <p><strong>Apellido:</strong> {{ usuario.infoPersonal?.apellido }}</p>
-    <p><strong>Dirección:</strong> {{ usuario.infoPersonal?.direccion }}</p>
+    <p><strong>Nombre:</strong> {{ usuario.nombre }}</p>
+    <p><strong>Apellido:</strong> {{ usuario.apellido }}</p>
+    <p><strong>Dirección:</strong> {{ usuario.direccion }}</p> 
 
     <h3>AFIP</h3>
-    <p><strong>CUIT:</strong> {{ usuario.afip?.cuit }}</p> 
+    <p><strong>CUIT:</strong> {{ usuario.afip?.cuit }}</p>
     <p><strong>Clave Fiscal:</strong> {{ usuario.afip?.claveFiscal }}</p>
 
-    <h3>Certificación de Ingresos</h3>
-    <p *ngIf="usuario.certIngreso"><strong>Año:</strong> {{ usuario.certIngreso.anio }}</p>
-    
-    <h3>Declaración Jurada</h3>
-    <p *ngIf="usuario.declaracionJurada">
-      <a [href]="usuario.declaracionJurada.pdf" target="_blank">Ver Declaración Jurada</a>
-    </p>
+    <h3>Certificación de Ingreso</h3>
+    <p><strong>Certificación:</strong> {{ usuario.certIngreso?.certIngreso }}</p>
+    <p><strong>PDF:</strong> <a [href]="usuario.certIngreso?.pdf" target="_blank">Ver Documento</a></p>
 
-    </div>
+    <h3>Declaración Jurada</h3>
+    <p><strong>Dirección:</strong> {{ usuario.declaracionJurada?.direccion }}</p>
+    <p><strong>Edad:</strong> {{ usuario.declaracionJurada?.edad }}</p>
+    <p><strong>PDF:</strong> <a [href]="usuario.declaracionJurada?.pdf" target="_blank">Ver Documento</a></p>
+
+    <h3>Facturación</h3>
+    <p><strong>Cliente:</strong> {{ usuario.facturacion?.cliente }}</p>
+    <p><strong>Facturas:</strong> {{ usuario.facturacion?.facturas }}</p>
+    <p><strong>PDF:</strong> <a [href]="usuario.facturacion?.pdf" target="_blank">Ver Documento</a></p>
+
+    <h3>Información Personal</h3>
+    <p><strong>Nombre:</strong> {{ usuario.infoPersonal?.nombre }}</p>
+    <p><strong>Password:</strong> {{ usuario.infoPersonal?.password }}</p>
+
+    <h3>Plan de Pago</h3>
+    <p><strong>PDF:</strong> <a [href]="usuario.planPago?.pdf" target="_blank">Ver Documento</a></p>
+  </div>
 
   <div *ngIf="!usuario">
     <p>Cargando datos del usuario...</p>

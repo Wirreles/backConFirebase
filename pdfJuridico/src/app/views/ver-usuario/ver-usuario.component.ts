@@ -45,9 +45,8 @@ usuario: any = {};
 
         // Cargar datos de subcolecciones
         for (const subcollection of this.subcollections) {
-          const subcollectionId = await this.firestoreService.getDocumentIdInSubcollection(`Usuarios/${this.userId}`, subcollection);
-          if (subcollectionId) {
-            const subcollectionData = await this.firestoreService.getDocumentById(`Usuarios/${this.userId}/${subcollection}`, subcollectionId);
+          const subcollectionData = await this.firestoreService.getSubcollectionDocument(`Usuarios/${this.userId}`, subcollection);
+          if (subcollectionData) {
             this.usuario[subcollection] = subcollectionData; 
           }
         }
