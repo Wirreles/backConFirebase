@@ -189,4 +189,9 @@ export class UserDetailPage implements OnInit {
       console.error(`No se encontró documento en la subcolección ${subcollection}`);
     }
   }
+
+   goBack() {
+    window.history.back();
+  }
+
 }

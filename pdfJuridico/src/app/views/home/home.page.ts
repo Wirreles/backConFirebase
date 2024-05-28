@@ -4,6 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule, NavController } from '@ionic/angular';
 import { FirestoreService } from '../../common/services/firestore.service';
 import { UserI } from '../../common/models/users.models';
+import { AuthService } from 'src/app/common/services/auth.service';
+import { RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -19,7 +22,7 @@ export class HomePage implements OnInit {
   user: UserI | undefined;
   showForm: boolean = false;
 
-  constructor(private firestoreService: FirestoreService, private navCtrl: NavController) {}
+  constructor(private firestoreService: FirestoreService, private navCtrl: NavController,private authService: AuthService,private router: Router,) {}
 
   ngOnInit() {
     this.loadUsers();
@@ -102,4 +105,13 @@ async delete(user: UserI) {
   goBack() {
     window.history.back();
   }
+
+
+
+  async logout() {
+    await this.authService.logout();
+    this.router.navigate(['/login']);
+  }
+
+
 }
