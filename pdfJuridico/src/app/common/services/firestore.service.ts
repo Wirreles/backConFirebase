@@ -18,6 +18,7 @@ import {
 import { Observable } from 'rxjs';
 import { v4 as uuidv4 } from 'uuid';
 
+
 // Convertidor genérico para Firestore
 const converter = <T>() => ({
   toFirestore: (data: WithFieldValue<T>) => data,
@@ -35,6 +36,10 @@ export class FirestoreService {
   private firestore: Firestore = inject(Firestore);
 
   constructor() { }
+
+  getFirestoreInstance(): Firestore {
+    return this.firestore;
+  }
 
   getDocument<T>(enlace: string): Promise<DocumentData> {
     const document = docWithConverter<T>(this.firestore, enlace);
