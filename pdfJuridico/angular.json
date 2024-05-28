@@ -33,7 +33,9 @@
             ],
             "styles": [
               "src/theme/variables.scss",
-              "src/global.scss"
+              "src/global.scss",
+              "src/app/views/login/login.page.scss",
+              "src/app/views/register/register.page.scss"
             ],
             "scripts": []
           },
