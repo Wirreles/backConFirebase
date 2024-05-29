@@ -1,12 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component,OnInit } from '@angular/core';
 import { IonHeader, IonToolbar, IonTitle, IonContent, IonLabel, IonList, IonItem, IonCard, IonInput, IonSpinner, IonButtons, IonButton, IonIcon, IonImg } from '@ionic/angular/standalone';
 import { UserI } from '../../common/models/users.models';
 import { FirestoreService } from '../../common/services/firestore.service';
 import { FormsModule } from '@angular/forms';
 import { IoniconsModule } from '../../common/modules/ionicons.module';
 import { AuthService } from 'src/app/common/services/auth.service';
-import { NavController } from '@ionic/angular';
+import { IonicModule, NavController } from '@ionic/angular';
 import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 
 @Component({
@@ -17,11 +18,12 @@ import { Router } from '@angular/router';
   imports: [IonImg, IonList, IonLabel, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonInput,
     IonIcon, IonButton, IonButtons, IonSpinner, IonInput, IonCard,
     FormsModule,
-    IoniconsModule,
+    IoniconsModule,CommonModule
   ],
 })
 export class HomePage implements OnInit {
-  users: UserI[] = [];
+
+ users: UserI[] = [];
   newUser: UserI = this.initUser();
   cargando: boolean = false;
   user: UserI | undefined;
@@ -50,8 +52,6 @@ export class HomePage implements OnInit {
       direccion: '',
       dni: '',
       edad: 0,
-      cuit: '',
-      claveFiscal: '',
       password: '',
     };
   }

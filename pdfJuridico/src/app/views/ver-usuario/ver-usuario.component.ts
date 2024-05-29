@@ -2,15 +2,13 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FirestoreService } from '../../common/services/firestore.service';
 import { CommonModule } from '@angular/common';
-import { IonicModule } from '@ionic/angular';
-import { IonHeader, IonToolbar, IonTitle, IonContent, IonLabel, IonList, IonItem, IonCard, IonInput, IonSpinner, IonButtons, IonButton, IonIcon, IonImg, IonCardHeader, IonCardContent, IonCardTitle } from '@ionic/angular/standalone';
+import { IonHeader, IonToolbar, IonTitle, IonContent, IonLabel, IonList, IonItem, IonCard, IonInput, IonSpinner, IonButtons, IonButton, IonIcon, IonImg, IonCardHeader, IonCardContent, IonCardTitle, IonBackButton } from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-ver-usuario',
   standalone: true,
   imports: [
     CommonModule,
-    IonicModule,
     IonHeader,
     IonToolbar,
     IonTitle,
@@ -27,7 +25,8 @@ import { IonHeader, IonToolbar, IonTitle, IonContent, IonLabel, IonList, IonItem
     IonImg,
     IonCardHeader,
     IonCardContent,
-    IonCardTitle
+    IonCardTitle,
+    IonBackButton
   ],
   templateUrl: './ver-usuario.component.html',
   styleUrls: ['./ver-usuario.component.scss'],

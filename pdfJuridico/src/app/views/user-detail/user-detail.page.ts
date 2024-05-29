@@ -1,17 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-import { IonicModule, NavController } from '@ionic/angular';
+import { NavController } from '@ionic/angular';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Storage, getDownloadURL, ref, uploadBytesResumable } from '@angular/fire/storage';
 import { FirestoreService } from '../../common/services/firestore.service';
 import { Observable } from 'rxjs';
-import { IonHeader, IonToolbar, IonContent, IonLabel, IonItem, IonInput, IonButton, IonSegmentButton, IonIcon, IonSegment } from '@ionic/angular/standalone';
+import { IonHeader, IonToolbar,  IonContent, IonLabel, IonItem, IonInput, IonSegmentButton, IonIcon, IonSegment, IonButtons, IonTitle, IonButton } from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-user-detail',
   standalone: true,
-  imports: [CommonModule, IonicModule, FormsModule, ReactiveFormsModule, IonHeader, IonButton, IonToolbar, IonIcon,IonContent,IonSegment, IonSegmentButton, IonLabel, IonInput, IonItem],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, IonHeader, IonButtons,IonToolbar, IonIcon,IonContent,IonSegment, IonSegmentButton, IonLabel, IonInput, IonItem, IonTitle, IonButton],
   templateUrl: './user-detail.page.html',
   styleUrls: ['./user-detail.page.scss'],
 })
