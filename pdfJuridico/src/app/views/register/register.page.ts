@@ -3,40 +3,59 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../common/services/auth.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { AlertController, IonicModule } from '@ionic/angular';
+import { AlertController } from '@ionic/angular';
+import { IonHeader, IonToolbar, IonTitle, IonContent, IonLabel, IonItem, IonCard, IonInput, IonButton, IonCardContent, IonCardHeader, IonCardTitle } from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, FormsModule, IonicModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonContent,
+    IonLabel,
+    IonItem,
+    IonCard,
+    IonInput,
+    IonButton,
+    IonCardHeader,
+    IonCardContent,
+    IonCardTitle
+  ],
   templateUrl: './register.page.html',
   styleUrls: ['./register.page.scss'],
 })
 export class RegisterPage {
   email: string = '';
   password: string = '';
-
-  registroExitoso: boolean = false; // Nueva propiedad
+  registroExitoso: boolean = false;
   errorMessage: string | null = null;
 
-  constructor(private authService: AuthService, private router: Router,private alertController: AlertController) { }
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private alertController: AlertController
+  ) {}
 
   register() {
     this.authService.register(this.email, this.password)
       .then(() => {
-        this.registroExitoso = true; 
+        this.registroExitoso = true;
         setTimeout(() => {
-          this.router.navigate(['/login']); 
-        }, 2000); 
+          this.router.navigate(['/login']);
+        }, 2000);
       })
       .catch(error => {
         console.error(error);
-        this.errorMessage = this.getErrorMessage(error.code); 
-        this.mostrarAlertaError(); 
+        this.errorMessage = this.getErrorMessage(error.code);
+        this.mostrarAlertaError();
       });
   }
 
-   private getErrorMessage(errorCode: string): string {
+  private getErrorMessage(errorCode: string): string {
     switch (errorCode) {
       case 'auth/email-already-in-use':
         return 'El correo electrónico ya está en uso.';
@@ -49,7 +68,6 @@ export class RegisterPage {
     }
   }
 
-  // Función para mostrar una alerta de error
   async mostrarAlertaError() {
     const alert = await this.alertController.create({
       header: 'Error',
@@ -58,6 +76,4 @@ export class RegisterPage {
     });
     await alert.present();
   }
-
 }
-

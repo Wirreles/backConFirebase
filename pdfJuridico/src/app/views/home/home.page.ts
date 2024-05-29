@@ -1,19 +1,24 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { IonicModule, NavController } from '@ionic/angular';
-import { FirestoreService } from '../../common/services/firestore.service';
+import { IonHeader, IonToolbar, IonTitle, IonContent, IonLabel, IonList, IonItem, IonCard, IonInput, IonSpinner, IonButtons, IonButton, IonIcon, IonImg } from '@ionic/angular/standalone';
 import { UserI } from '../../common/models/users.models';
+import { FirestoreService } from '../../common/services/firestore.service';
+import { FormsModule } from '@angular/forms';
+import { IoniconsModule } from '../../common/modules/ionicons.module';
 import { AuthService } from 'src/app/common/services/auth.service';
-import { RouterLink } from '@angular/router';
+import { NavController } from '@ionic/angular';
 import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-home',
+  templateUrl: 'home.page.html',
+  styleUrls: ['home.page.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, IonicModule],
-  templateUrl: './home.page.html',
-  styleUrls: ['./home.page.scss'],
+  imports: [IonImg, IonList, IonLabel, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonInput,
+    IonIcon, IonButton, IonButtons, IonSpinner, IonInput, IonCard,
+    FormsModule,
+    IoniconsModule,
+  ],
 })
 export class HomePage implements OnInit {
   users: UserI[] = [];
@@ -98,7 +103,7 @@ async delete(user: UserI) {
   }
 
   ver(user: UserI) {
-  this.navCtrl.navigateForward(`/ver-usuario/${user.id}`); 
+  this.navCtrl.navigateForward(`/ver-usuario/${user.id}`);
 }
 
 

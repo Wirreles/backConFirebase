@@ -6,11 +6,12 @@ import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } 
 import { Storage, getDownloadURL, ref, uploadBytesResumable } from '@angular/fire/storage';
 import { FirestoreService } from '../../common/services/firestore.service';
 import { Observable } from 'rxjs';
+import { IonHeader, IonToolbar, IonContent, IonLabel, IonItem, IonInput, IonButton, IonSegmentButton, IonIcon, IonSegment } from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-user-detail',
   standalone: true,
-  imports: [CommonModule, IonicModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, IonicModule, FormsModule, ReactiveFormsModule, IonHeader, IonButton, IonToolbar, IonIcon,IonContent,IonSegment, IonSegmentButton, IonLabel, IonInput, IonItem],
   templateUrl: './user-detail.page.html',
   styleUrls: ['./user-detail.page.scss'],
 })

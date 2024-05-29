@@ -1,27 +1,41 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FirestoreService } from '../../common/services/firestore.service';
-import { doc, getDoc } from 'firebase/firestore';
 import { CommonModule } from '@angular/common';
-import { IonicModule } from '@ionic/angular'; // Importar IonicModule
-
-
+import { IonicModule } from '@ionic/angular';
+import { IonHeader, IonToolbar, IonTitle, IonContent, IonLabel, IonList, IonItem, IonCard, IonInput, IonSpinner, IonButtons, IonButton, IonIcon, IonImg, IonCardHeader, IonCardContent, IonCardTitle } from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-ver-usuario',
   standalone: true,
-  imports: [CommonModule, IonicModule],
+  imports: [
+    CommonModule,
+    IonicModule,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonContent,
+    IonLabel,
+    IonList,
+    IonItem,
+    IonCard,
+    IonInput,
+    IonSpinner,
+    IonButtons,
+    IonButton,
+    IonIcon,
+    IonImg,
+    IonCardHeader,
+    IonCardContent,
+    IonCardTitle
+  ],
   templateUrl: './ver-usuario.component.html',
   styleUrls: ['./ver-usuario.component.scss'],
 })
 export class VerUsuarioComponent implements OnInit {
   userId: string;
-  // usuario: any;
-
-
-usuario: any = {};
+  usuario: any = {};
   subcollections = ['AFIP', 'certIngreso', 'declaracionJurada', 'facturacion', 'infoPersonal', 'planPago'];
-
 
   constructor(
     private route: ActivatedRoute,
@@ -34,7 +48,7 @@ usuario: any = {};
     this.cargarDatosUsuario();
   }
 
-    async cargarDatosUsuario() {
+  async cargarDatosUsuario() {
     try {
       console.log('Usuario ID:', this.userId); // Agrega esta línea para verificar el ID
       const usuarioDoc = await this.firestoreService.getDocumentById('Usuarios', this.userId);
