@@ -32,7 +32,6 @@
               }
             ],
             "styles": [
-              "src/variables.scss",
   "src/global.scss"
             ],
             "scripts": []
@@ -110,8 +109,7 @@
               }
             ],
             "styles": [
-              "src/global.scss",
-              "src/variables.scss"
+              "src/global.scss"
             ],
             "scripts": []
           },
