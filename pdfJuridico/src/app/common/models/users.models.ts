@@ -5,8 +5,5 @@ export interface UserI {
     direccion: string;
     dni: string;
     edad?: number;
-    cuit: string;
-    claveFiscal: string;
     password: string;
   }
-  
