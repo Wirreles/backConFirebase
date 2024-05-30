@@ -2,7 +2,7 @@
   <ion-toolbar color="primary">
     <ion-title  class="ion-text-center" >Ver Usuario</ion-title>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/home"></ion-back-button> 
+      <ion-back-button defaultHref="/home"></ion-back-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -50,7 +50,7 @@
         <a [href]="usuario.declaracionJurada.pdf" target="_blank">Ver Declaración Jurada</a>
       </ion-card-content>
     </ion-card>
-    
+
     <ion-card *ngIf="usuario.facturacion">
       <ion-card-header>
         <ion-card-title>Facturación</ion-card-title>
@@ -67,6 +67,24 @@
       </ion-card-header>
       <ion-card-content>
         <a [href]="usuario.planPago.pdf" target="_blank">Ver Plan de Pago</a>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card *ngIf="usuario.sueldos">
+      <ion-card-header>
+        <ion-card-title>Sueldos</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <a [href]="usuario.sueldos.pdf" target="_blank">Ver Sueldos</a>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card *ngIf="usuario.f931">
+      <ion-card-header>
+        <ion-card-title>f931</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <a [href]="usuario.f931.pdf" target="_blank">Ver f931</a>
       </ion-card-content>
     </ion-card>
 

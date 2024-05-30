@@ -92,9 +92,9 @@ export class FirestoreService {
   async createUserWithSubcollections(userData: any, userId: string): Promise<void> {
     const userRef = doc(this.firestore, `Usuarios/${userId}`);
     await setDoc(userRef, userData);
-    
+
     // Create subcollections
-    const subcollections = ['certIngreso', 'declaracionJurada', 'facturacion', 'infoPersonal', 'planPago', 'AFIP'];
+    const subcollections = ['certIngreso', 'declaracionJurada', 'facturacion', 'infoPersonal', 'planPago', 'AFIP', 'sueldos', 'f931'];
     for (const subcollection of subcollections) {
       const subcollectionRef = doc(collection(userRef, subcollection));
       await setDoc(subcollectionRef, { initialized: true }); // Puedes añadir datos por defecto aquí
