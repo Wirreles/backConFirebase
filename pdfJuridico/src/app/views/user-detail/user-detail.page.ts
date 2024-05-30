@@ -7,7 +7,7 @@ import { Storage, getDownloadURL, ref, uploadBytesResumable } from '@angular/fir
 import { FirestoreService } from '../../common/services/firestore.service';
 import { Observable } from 'rxjs';
 import { IonHeader, IonToolbar, IonContent, IonLabel, IonItem, IonInput, IonSegmentButton, IonIcon, IonSegment, IonButtons, IonTitle, IonButton, IonMenu, IonList, IonMenuButton } from '@ionic/angular/standalone';
-
+import { Router, RouterLink } from '@angular/router';
 @Component({
   selector: 'app-user-detail',
   standalone: true,
@@ -36,6 +36,7 @@ export class UserDetailPage implements OnInit {
     private route: ActivatedRoute,
     private navCtrl: NavController,
     private fb: FormBuilder,
+    private router: Router,
     private firestoreService: FirestoreService,
     private storage: Storage,
     private alertController: AlertController,
@@ -318,5 +319,8 @@ export class UserDetailPage implements OnInit {
 
   goBack() {
     window.history.back();
+  }
+  goHome(){
+    this.router.navigate(['/home'])
   }
 }

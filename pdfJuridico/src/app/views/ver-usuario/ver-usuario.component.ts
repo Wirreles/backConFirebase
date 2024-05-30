@@ -34,7 +34,8 @@ import { IonHeader, IonToolbar, IonTitle, IonContent, IonLabel, IonList, IonItem
 export class VerUsuarioComponent implements OnInit {
   userId: string;
   usuario: any = {};
-  subcollections = ['AFIP', 'certIngreso', 'declaracionJurada', 'facturacion', 'infoPersonal', 'planPago'];
+  subcollections = ['AFIP', 'certIngreso', 'declaracionJurada',
+  'facturacion', 'infoPersonal', 'planPago', 'sueldos', 'f931'];
 
   constructor(
     private route: ActivatedRoute,
