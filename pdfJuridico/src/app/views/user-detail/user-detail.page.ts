@@ -247,7 +247,7 @@ export class UserDetailPage implements OnInit {
       this.showAlert('Espere a que termine la carga del archivo.');
       return;
     }
-    await this.saveSubcollectionData(this.certificacionIngresosForm, 'certIngreso');
+    await this.addNewCertificacionIngresos();
     this.showAlert('Certificación de ingresos guardada exitosamente.');
   }
 
@@ -315,6 +315,20 @@ export class UserDetailPage implements OnInit {
     } else {
       console.error(`No se encontró documento en la subcolección ${subcollection}`);
     }
+  }
+
+  async createSubcollectionData(form: FormGroup, subcollectionName: string) {
+    const subcollectionPath = `Usuarios/${this.userId}/${subcollectionName}`;
+    await this.firestoreService.createDocumentWithAutoId(form.value, subcollectionPath).then(() => {
+      console.log(`${subcollectionName} data saved`, form.value);
+    });
+  }
+
+  async addNewCertificacionIngresos() {
+    const subcollectionPath = `Usuarios/${this.userId}/certIngreso`;
+    await this.firestoreService.createDocumentWithAutoId(this.certificacionIngresosForm.value, subcollectionPath).then(() => {
+      console.log(`New certificacion de ingresos data saved`, this.certificacionIngresosForm.value);
+    });
   }
 
   goBack() {

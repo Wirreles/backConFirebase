@@ -64,6 +64,25 @@ export class HomePage implements OnInit {
     this.newUser = this.initUser();
     this.showForm = false;
   }
+  // SI QUEREMOS GUARDAR CON CONTRASEÑA HASHEADA
+  // async save() {
+  //   this.cargando = true;
+  //   try {
+      // Hash the password before saving the user
+  //     const hashedPassword = await bcrypt.hash(this.newUser.password, 10);
+  //     const userData = { ...this.newUser, password: hashedPassword };
+
+  //     const userId = this.newUser.id;
+  //     await this.firestoreService.createUserWithSubcollections(userData, userId);
+
+  //     this.cargando = false;
+  //     this.newUser = this.initUser();
+  //     this.showForm = false;
+  //   } catch (error) {
+  //     console.error("Error creating user:", error);
+  //     this.cargando = false;
+  //   }
+  // }
 
   async edit(user: UserI) {
     console.log(user.id)
